@@ -64,7 +64,22 @@ function install_bat(environment_variables)
     return;
   end
 
-  install_package("bat", environment_variables);
+  local os_name = environment_variables["OS_NAME"];
+  if (os_name) then os_name = os_name:lower() end
+
+  if (os_name == "ubuntu") then
+    local command = [[
+    cd ~/.tmp_build &&\
+    curl -s https://api.github.com/repos/sharkdp/bat/releases/latest \
+      | grep "browser_download_url.*bat_.*amd64.deb" \
+      | sed "s/\"\(.*\)\".*\"\(.*\)\"/\2/g" \
+      | wget -qi - && \
+    sudo dpkg -i bat*amd64.deb
+    ]];
+    print(run_command(command));
+  else
+    install_package("bat", environment_variables);
+  end
   if (not check_for_command("bat")) then
     print("Install failed!");
   end
