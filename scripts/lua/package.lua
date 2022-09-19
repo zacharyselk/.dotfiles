@@ -200,8 +200,8 @@ function install_neovim(environment_variables)
   print(run_command(string.format("cd %s && make install", build_dir)));
   append_to_path("$HOME/.local/neovim/bin");
 
-  print("Cloning Neovim Config");
-  print(run_command("cd $HOME/.config && git clone https://github.com/zacharyselk/nvim"));
+  print("Setting up NeoVim config");
+  print(run_command("ln -s $HOME/.dotfile/nvim $HOME/.config/nvim"));
 end
 
 function install_syncthing(environment_variables)
