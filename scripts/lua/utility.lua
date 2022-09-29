@@ -1,9 +1,8 @@
 -- Utility Module ---------------------------------------------------------------------------------
 function parameter_types(...)
-  local args = table.pack(...);
-  for i=1, args.n, 2 do
-    local var = args[i];
-    local var_type = args[i+1];
+  for i=1, select("#", ...), 2 do
+    local var = select(i, ...);
+    local var_type = select(i+1, ...);
     local var_types = {};
     for t in string.gmatch(var_type, "([^|]+)") do
       table.insert(var_types, t);
@@ -15,9 +14,9 @@ function parameter_types(...)
           return;
         end
       end
-      assert(false, string.format("Expected %s but recieved %s", var_type, var));
+      assert(false, string.format("Expected %s but recieved %s", var_type, type(var)));
     else
-      assert(type(var) == var_type, string.format("Expected %s but recieved %s", var_type, var));
+      assert(type(var) == var_type, string.format("Expected %s but recieved %s", var_type, type(var)));
     end
   end
 end

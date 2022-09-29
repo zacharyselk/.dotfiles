@@ -19,7 +19,7 @@ function read_file(filename)
 
   assert(file_exists(filename), string.format("File '%s' does not exist", filename));
   local f = assert(io.open(filename, "rb"));
-  local contents = assert(f:read("a"));
+  local contents = assert(f:read("*a"));
   f:close()
   return contents
 end
