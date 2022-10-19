@@ -103,6 +103,8 @@ return packer.startup(function(use)
   use "norcalli/nvim-colorizer.lua"  -- Colors hex codes
   use "akinsho/toggleterm.nvim"  -- Toogles a terminal buffer
   use "folke/which-key.nvim"  -- Interactivly show key bindings
+
+  use "chrisbra/csv.vim"  -- Parse CSV files
   ------------------------------------------------------------------------------
   
 end)
