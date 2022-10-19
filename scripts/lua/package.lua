@@ -8,7 +8,6 @@ local function prompt(msg)
 
   io.write(msg.." [Y/n] ");
   local response = io.read("*l");
-  print('"'..response..'"');
   response = string.gsub(response, "\n", "");
   if (response:lower() == "y" or response == "") then
     return true;
@@ -17,28 +16,37 @@ local function prompt(msg)
   end
 end
 
-local function install_package_apt(package)
-  parameter_types(package, "string");
-
-  print(run_command("sudo apt install -y "..package));
+local function get_root_command(environment_variables)
+  local root_command = suggest_root_command(environment_variables);
+  if (root_command == nil) then
+    return "";
+  else
+    return root_command;
+  end
 end
 
-local function install_package_apt_get(package)
-  parameter_types(package, "string");
+local function install_package_apt(package, environment_variables)
+  parameter_types(package, "string", environment_variables, "table");
 
-  print(run_command("sudo apt-get install -y "..package));
+  print(run_root_command("apt install -y "..package, environment_variables));
 end
 
-local function install_package_brew(package)
-  parameter_types(package, "string");
+local function install_package_apt_get(package, environment_variables)
+  parameter_types(package, "string", environment_variables, "table");
+
+  print(run_root_command("apt-get install -y "..package, environment_variables));
+end
+
+local function install_package_brew(package, environment_variables)
+  parameter_types(package, "string", environment_variables, "table");
 
   print(run_command("brew install "..package));
 end
 
-local function install_package_yum(package)
-  parameter_types(package, "string");
+local function install_package_yum(package, environment_variables)
+  parameter_types(package, "string", environment_variables, "table");
 
-  print(run_command("sudo yum install -y "..package));
+  print(run_root_command("yum install -y "..package, environment_variables));
 end
 
 function install_package(package, environment_variables)
@@ -46,10 +54,10 @@ function install_package(package, environment_variables)
 
   print("Installing "..package);
   local pm = assert(environment_variables["DEFAULT_PACKAGE_MANAGER"], "No default package manager found");
-  if     (pm == "apt") then install_package_apt(package);
-  elseif (pm == "apt-get") then install_package_apt_get(package);
-  elseif (pm == "brew") then install_package_brew(package);
-  elseif (pm == "yum") then install_package_yum(package);
+  if     (pm == "apt") then install_package_apt(package, environment_variables);
+  elseif (pm == "apt-get") then install_package_apt_get(package, environment_variables);
+  elseif (pm == "brew") then install_package_brew(package, environment_variables);
+  elseif (pm == "yum") then install_package_yum(package, environment_variables);
   else print(string.format("Error: Package manager '%s' is not supported", pm));
   end
 end
@@ -77,6 +85,32 @@ function install_bat(environment_variables)
     sudo dpkg -i bat*amd64.deb
     ]];
     print(run_command(command));
+  elseif (os_name == "centos linux") then
+    install_package("cargo", environment_variables);
+    local command0 = [[
+    cd ~/.tmp_build && \
+    rm -rf * && \
+    curl -s https://api.github.com/repos/sharkdp/bat/releases/latest \
+      | grep "tarball_url" \
+      | sed "s/^.*\"\(.*\)\".*\"\(.*\)\".*$/\2/g" \
+      | wget -qi -
+    ]];
+    local command1 = [[
+    cd ~/.tmp_build && \
+    tar -xzpof *
+    ]];
+    local command2 = [[
+    cd ~/.tmp_build/sharkdp-bat* && \
+    cargo install --root ~/.local/bat --locked bat
+    ]];
+    print(command0);
+    print(run_command(command0));
+    print(command1);
+    print(run_command(command1));
+    print(command2);
+    print(run_command(command2));
+
+    append_to_path("$HOME/.local/bat/bin", environment_variables);
   else
     install_package("bat", environment_variables);
   end
@@ -183,7 +217,7 @@ function install_neovim(environment_variables)
   end
 
   print("Installing Build Prerequisites for Neovim");
-  install_package(packages);
+  install_package(packages, environment_variables);
 
   local git_repo = "https://github.com/neovim/neovim";
   local tmp_dir = "$HOME/.tmp_build";
@@ -198,10 +232,10 @@ function install_neovim(environment_variables)
   print("Building Neovim");
   print(run_command(string.format("cd %s && make %s", build_dir, build_args)));
   print(run_command(string.format("cd %s && make install", build_dir)));
-  append_to_path("$HOME/.local/neovim/bin");
+  append_to_path("$HOME/.local/neovim/bin", environment_variables);
 
   print("Setting up NeoVim config");
-  print(run_command("ln -s $HOME/.dotfile/nvim $HOME/.config/nvim"));
+  print(run_command("ln -s $HOME/.dotfiles/nvim/ $HOME/.config/nvim"));
 end
 
 function install_syncthing(environment_variables)

@@ -44,3 +44,5 @@ else
         \ endif
 endif
 autocmd BufReadPost * if exists('b:reload_dos') | unlet b:reload_dos | endif
+
+set mouse=

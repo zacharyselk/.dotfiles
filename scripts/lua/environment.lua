@@ -53,7 +53,7 @@ local function probe_for_windows()
   end
 end
 
-local function probe_for_unix_version()
+local function probe_for_macos_version()
   local output = run_command("uname -r");
   if (output) then
     return split_string(output, '\n')[1];
@@ -61,6 +61,16 @@ local function probe_for_unix_version()
     return nil;
   end
 end
+
+local function probe_for_linux_version()
+  local output = run_command([[cat /etc/os-release | grep "^VERSION=" | sed 's/^.*=\"\(.*\)\"/\1/g']]);
+  if (output) then
+    return output;
+  else
+    return nil;
+  end
+end
+
 
 local function probe_for_macos_name(environment_variables)
   parameter_types(environment_variables, "table");
@@ -81,12 +91,43 @@ local function probe_for_macos_name(environment_variables)
   return nil;
 end
 
+local function probe_for_linux_name(environment_variables)
+  parameter_types(environment_variables, "table");
+
+  local output = run_command([[cat /etc/os-release | grep "^NAME=" | sed 's/^.*=\"\(.*\)\"/\1/g']]);
+  if (output) then
+    return output;
+  else
+    return nil;
+  end
+end
+
 local function probe_for_macos_shell()
   local output = run_command("dscl . -read ~/ UserShell")
   if (starts_with(output, "UserShell: ")) then
     return string.sub(output, string.len("UserShell: ") + 1, string.len(output));
   else
     return nil;
+  end
+end
+
+local function probe_for_linux_shell()
+  local output = run_command([[cat /etc/passwd | grep "^$USER:" | rev | cut -d':' -f1 | rev]]);
+  if (output) then
+    return output;
+  else
+    return nil;
+  end
+end
+
+local function linux_root_command(command)
+  parameter_types(command, "string");
+
+  local output = run_command([[grep "root" /etc/group | grep "$USER"]]);
+  if (output and output ~= "") then
+    return run_command("sudo "..command);
+  else
+    return run_command("su root -c '"..command.."'");
   end
 end
 
@@ -115,7 +156,7 @@ local function suggest_os_name(environment_variables)
   if (os_kernel:lower() == "darwin") then
     return probe_for_macos_name(environment_variables);
   elseif (os_kernel:lower() == "linux") then
-    return probe_for_linux_name();
+    return probe_for_linux_name(environment_variables);
   elseif (os.kernel:lower() == "windows") then
     return nil;
   else
@@ -132,9 +173,9 @@ local function suggest_os_version(environment_variables)
   end
   
   if (os_kernel:lower() == "darwin") then
-    return probe_for_unix_version();
+    return probe_for_macos_version();
   elseif (os_kernel:lower() == "linux") then
-    return probe_for_unix_version();
+    return probe_for_linux_version();
   elseif (os.kernel:lower() == "windows") then
     return nil;
   else
@@ -153,7 +194,7 @@ local function suggest_default_shell(environment_variables)
   if (os_kernel:lower() == "darwin") then
     return probe_for_macos_shell();
   elseif (os_kernel:lower() == "linux") then
-    return nil;
+    return probe_for_linux_shell();
   elseif (os.kernel:lower() == "windows") then
     return nil;
   else
@@ -192,6 +233,25 @@ local function suggest_default_package_manager(environment_variables)
     return "brew";
   elseif (os_kernel:lower() == "linux") then
     return nil;
+  elseif (os.kernel:lower() == "windows") then
+    return "choco";
+  else
+    return nil;
+  end
+end
+
+function run_root_command(command, environment_variables)
+  parameter_types(command, "string", environment_variables, "table");
+
+  local os_kernel = environment_variables["OS_KERNEL"];
+  if (not os_kernel) then
+    return nil;
+  end
+  
+  if (os_kernel:lower() == "darwin") then
+    return nil;
+  elseif (os_kernel:lower() == "linux") then
+    return linux_root_command(command);
   elseif (os.kernel:lower() == "windows") then
     return "choco";
   else
