@@ -8,16 +8,25 @@ end
 
 lspconfig.ccls.setup{
   filetypes = { "c", "cpp", "hpp", "objc", "objcpp" },
-  --root_dir = "compile_commands.json",
   init_options = {
-    compilationDatabaseDirectory = "build",
+    cache = {directory = "/tmp/ccls-cache"},
+    compilationDatabaseDirectory = "cmake-build",
     index = {
       threads = 0,
     };
     clang = {
       excludeArgs = { "-frounding-math"},
     },
-  }
+  },
+  root_dir = 
+    function (dir)
+      local filename = dir:match("*.+/(.+)$");
+      if (filename == ".ccls") then
+        return true;
+      else
+        return false;
+      end
+    end,
 }
 --lspconfig.jdtls.setup{}
 
@@ -46,6 +55,8 @@ lspconfig.pylsp.setup{
   }
 }
 
+--lspconfig.clangd.setup{}
+
 local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not cmp_nvim_lsp_status then
   print("Error: Cmp-nvim-lsp did not load")
@@ -54,7 +65,7 @@ end
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 local servers = { 'ccls' }
