@@ -52,7 +52,7 @@ return packer.startup(function(use)
   ------------------------------------------------------------------------------
 
   -- Theming/Coloring ----------------------------------------------------------
-  use "Mofiqul/dracula.nvim"  -- Dracula theme
+  --use "Mofiqul/dracula.nvim"  -- Dracula theme
   use "lukas-reineke/indent-blankline.nvim"  -- Indentation guides 
   use {
     "nvim-treesitter/nvim-treesitter",  -- Syntax highlighter
