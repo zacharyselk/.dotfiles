@@ -84,6 +84,11 @@ return packer.startup(function(use)
   use "neovim/nvim-lspconfig"
   use "nvim-lua/lsp-status.nvim"
   use "mfussenegger/nvim-jdtls"
+
+  use "Olical/conjure"
+  use "tpope/vim-dispatch"
+  use "clojure-vim/vim-jack-in"
+  use "radenling/vim-dispatch-neovim"
   ------------------------------------------------------------------------------
 
   -- Completion ----------------------------------------------------------------
