@@ -193,6 +193,28 @@ function install_github_cli(environment_variables)
   end
 end
 
+function install_rg(environment_variables)
+  parameter_types(environment_variables, "table");
+
+  if (check_for_command("rg")) then
+    return;
+  end
+  if (not prompt("install ripgrep?")) then
+    return;
+  end
+
+  local os = assert(environment_variables["OS_NAME"], "No OS Found!");
+  if (os == "Debian") then
+    local rg_package_name = "ripgrep_13.0.0_amd64.deb";
+    print(run_command(string.format("curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/%s && sudo dpkg -i %s && rm %s", rg_package_name, rg_package_name, rg_package_name)));
+  else
+    install_package("ripgrep", environment_variables);
+  end
+  if (not check_for_command("rg")) then
+    print("install failed!");
+  end
+end
+
 function install_neovim(environment_variables)
   parameter_types(environment_variables, "table");
 
@@ -257,6 +279,7 @@ function install_all_packages(environment_variables)
   install_exa(environment_variables);
   install_fzf(environment_variables);
   install_github_cli(environment_variables);
+  install_rg(environment_variables);
   install_neovim(environment_variables);
   install_syncthing(environment_variables);
 end
