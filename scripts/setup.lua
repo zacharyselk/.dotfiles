@@ -84,6 +84,7 @@ end
 
 local function main()
   local environment_variables = check_environment_variables();
+  add_rc_defaults(environment_variables);
   create_home_directories(environment_variables);
   add_to_path(environment_variables);
   install_packages(environment_variables);
