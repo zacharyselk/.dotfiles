@@ -123,7 +123,7 @@ end
 local function linux_root_command(command)
   parameter_types(command, "string");
 
-  local output = run_command([[grep "root" /etc/group | grep "$USER"]]);
+  local output = run_command([[grep "sudo" /etc/group | grep "$USER"]]);
   if (output and output ~= "") then
     return run_command("sudo "..command);
   else
