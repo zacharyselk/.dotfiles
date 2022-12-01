@@ -55,4 +55,23 @@ function create_directory(path)
 
   run_command(string.format("mkdir -p %s", path));
 end
+
+function table_to_string(table)
+  parameter_types(table, "table");
+
+  local str = "{ ";
+  local size = #table;
+  local i = 1;
+  for k, v in pairs(table) do
+    str = str .. tostring(k) .. "=" .. tostring(v) 
+
+    if (i < size) then
+      str = str .. ", ";
+    end
+    i = i + 1;
+  end
+  str = str .. " }";
+
+  return str;
+end
 ---------------------------------------------------------------------------------------------------
