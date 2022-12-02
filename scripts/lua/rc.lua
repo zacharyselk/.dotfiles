@@ -169,12 +169,17 @@ end
 local function get_rc_environment_variables()
   return {
     {"PATH", "$PATH:$HOME/bin"},
+    {"PATH", "$PATH:$HOME/.bin"},
   };
 end
 
 local function get_rc_aliases()
   return {
     {"ls", "exa --icons"},
+    {"diff", "kitty +kitten diff"},
+    {"icat", "kitty +kitten icat"},
+    {"ssh", "kitty +kitten ssh"},
+    {"rg", "kitty +kitten hyperlinked_grep"},
   };
 end
 
