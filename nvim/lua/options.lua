@@ -19,8 +19,9 @@ softtabstop = 2,
 tabstop = 2,
 updatetime = 300,
 
-fileformats = "unix",
+fileformats = "unix,dos,mac",
 guifont = "Hack_Nerd_Font:h11",
+--guifont = "LiberationMono:h11",
 
 autoindent = true,
 expandtab = true,

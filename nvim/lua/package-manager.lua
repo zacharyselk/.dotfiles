@@ -49,6 +49,7 @@ return packer.startup(function(use)
   -- Cursor movement -----------------------------------------------------------
   --use "unblevable/quick-scope"  -- Hop around the current line
   use "phaazon/hop.nvim"  -- Hop around the screen using work prefixes
+  use "chentoast/marks.nvim"
   ------------------------------------------------------------------------------
 
   -- Theming/Coloring ----------------------------------------------------------
@@ -89,6 +90,9 @@ return packer.startup(function(use)
   use "tpope/vim-dispatch"
   use "clojure-vim/vim-jack-in"
   use "radenling/vim-dispatch-neovim"
+
+  use "clojure-vim/vim-jack-in"
+  use "radenling/vim-dispatch-neovim"
   ------------------------------------------------------------------------------
 
   -- Completion ----------------------------------------------------------------
@@ -110,6 +114,7 @@ return packer.startup(function(use)
   use "norcalli/nvim-colorizer.lua"  -- Colors hex codes
   use "akinsho/toggleterm.nvim"  -- Toogles a terminal buffer
   use "folke/which-key.nvim"  -- Interactivly show key bindings
+  use "mrjones2014/legendary.nvim"  -- Creates Legends
   ------------------------------------------------------------------------------
   
 end)

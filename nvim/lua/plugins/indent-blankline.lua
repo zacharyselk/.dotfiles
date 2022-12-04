@@ -11,8 +11,12 @@ vim.cmd [[highlight IndentBlanklineIndent1 guibg=#282a36 gui=nocombine]]
 --vim.cmd [[highlight IndentBlanklineIndent2 guibg=#252731 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent2 guibg=#2c2f3a gui=nocombine]]
 
+vim.opt.list = true
+vim.opt.listchars:append "space:⋅"
+vim.opt.listchars:append "eol:↴"
+
 indent_blankline.setup {
-    --char = "",
+    char = " ",
     --char_highlight_list = {
     --   "IndentBlanklineIndent1",
     --   "IndentBlanklineIndent2",
@@ -21,7 +25,9 @@ indent_blankline.setup {
     --   "IndentBlanklineIndent1",
     --   "IndentBlanklineIndent2",
     --},
-    --show_trailing_blankline_indent = false,
+    show_current_context = true,
+    show_current_context_start = true,
+    show_trailing_blankline_indent = false,
 }
 
 --require("indent_blankline").setup {

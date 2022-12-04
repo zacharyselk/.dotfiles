@@ -165,8 +165,8 @@ nvim_tree.setup {
     exclude = {},
   },
   filesystem_watchers = {
-    enable = false,
-    interval = 100,
+    enable = true,
+    --interval = 100, --Removed because of error: unknown option: filesystem_watchers.interval
   },
   git = {
     enable = true,
