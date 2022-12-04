@@ -215,6 +215,22 @@ function install_rg(environment_variables)
   end
 end
 
+function install_zsh(environment_variables)
+  parameter_types(environment_variables, "table");
+
+  if (check_for_command("zsh")) then
+    return;
+  end
+  if (not prompt("install zsh?")) then
+    return;
+  end
+
+  install_package("zsh", environment_variables);
+  if (not check_for_command("zsh")) then
+    print("install failed!");
+  end
+end
+
 function install_neovim(environment_variables)
   parameter_types(environment_variables, "table");
 
@@ -280,6 +296,7 @@ function install_all_packages(environment_variables)
   install_fzf(environment_variables);
   install_github_cli(environment_variables);
   install_rg(environment_variables);
+  install_zsh(environment_variables);
   install_neovim(environment_variables);
   install_syncthing(environment_variables);
 end
