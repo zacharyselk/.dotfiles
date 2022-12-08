@@ -1,7 +1,7 @@
 -- https://github.com/chentoast/marks.nvim
 local status_ok, marks = pcall(require, "marks")
 if not status_ok then
-  print("Error: Hop did not load!")
+  print("Error: Marks did not load!")
 	return
 end
 

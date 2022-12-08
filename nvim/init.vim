@@ -17,7 +17,7 @@ autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 
 syntax enable
 highlight NvimTreeFolderIcon guibg=blue
 
-aug fix_eol
-  au!
-  BufReadPost * if &ff!=unix | keepp %s/\r$//e | endif
-aug END
+"aug fix_eol
+"  au!
+"  BufReadPost * if &ff!=unix | keepp %s/\r$//e | endif
+"aug END

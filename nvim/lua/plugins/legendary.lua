@@ -1,7 +1,7 @@
 -- https://github.com/mrjones2014/legendary.nvim
 local status_ok, legendary = pcall(require, "legendary")
 if not status_ok then
-  print("Error: Hop did not load!")
+  print("Error: Legendary did not load!")
 	return
 end
 
@@ -33,7 +33,7 @@ legendary.setup({
     --  -- autocmds here
     --},
   },
-  functions = {
+  funcs = {
     -- Make arbitrary Lua functions that can be executed via the item finder
     --{ function() doSomeStuff() end, description = 'Do some stuff with a Lua function!' },
   },
