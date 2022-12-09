@@ -21,3 +21,4 @@ highlight NvimTreeFolderIcon guibg=blue
 "  au!
 "  BufReadPost * if &ff!=unix | keepp %s/\r$//e | endif
 "aug END
+
