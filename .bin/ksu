@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Switch users and add kitty terminal info
+NEW_USER=$1
+ORIGINAL_HOME=$HOME
+sudo TERMINFO=$ORIGINAL_HOME/.terminfo su $NEW_USER
