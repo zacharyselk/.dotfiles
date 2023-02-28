@@ -1,9 +1,43 @@
 local M = {};
 local opts = { noremap = true, silent = true };
+local visualOpts = { vnoremap = true, silent = true };
 local loud = { noremap = true };
 local term_opts = { silent = true };
 local keymap = vim.api.nvim_set_keymap;
 local wk = require("which-key");
+
+-- TODO: Move to a file for custom functions
+function AlignText(delimiter)
+  -- Get the current visual selection range
+  local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "<"))
+  local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, ">"))
+  
+  -- Get the selected text
+  local lines = vim.api.nvim_buf_get_lines(0, start_line-1, end_line, false)
+  
+  -- Find the maximum length of the text before the delimiter
+  local max_length = 0
+  for _, line in ipairs(lines) do
+    local idx = string.find(line, delimiter)
+    if idx ~= nil then
+      max_length = math.max(max_length, idx-1)
+    end
+  end
+  
+  -- Replace the text after the delimiter with whitespace to align it
+  for i, line in ipairs(lines) do
+    local idx = string.find(line, delimiter)
+    if idx ~= nil then
+      local prefix = string.sub(line, 1, idx-1)
+      local suffix = string.sub(line, idx)
+      local padding = string.rep(' ', max_length - #prefix)
+      lines[i] = prefix .. padding .. suffix
+    end
+  end
+  
+  -- Set the new text in the buffer
+  vim.api.nvim_buf_set_lines(0, start_line-1, end_line, false, lines)
+end
 
 
 --local function keymappings(client, bufnr)
@@ -227,10 +261,54 @@ local wk = require("which-key");
   --keymap('v', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opts);
   --keymap('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opts);
   ------------------------------------------------------------------------------
+
+  -- Visual --------------------------------------------------------------------
+  keymap("v", "A", "<cmd>lua AlignText('=')<cr>", opts);
+  ------------------------------------------------------------------------------
 --end
+
 
 function M.setup(client, bufnr)
   keymappings(client, bufnr);
 end
 
+function titleCase( first, rest )
+   return first:upper()..rest:lower()
+end
+
+vim.cmd('autocmd FileType * lua setLspKeybinds()')
+function setLspKeybinds()
+    local fileType = vim.api.nvim_buf_get_option(0, "filetype")
+    local titleCaseFileType = string.gsub(fileType, "(%a)([%w_']*)", titleCase)
+    --local opts = { prefix = '<LocalLeader>', buffer = 0 }
+
+    wk.register({
+      ["<Leader>;"] = {
+        name = titleCaseFileType,
+      },
+    }, opts)
+
+    if fileType == 'clojure' then
+      wk.register({
+        ["<Leader>;l"] = {
+          name = "Log",
+        },
+      }, opts)
+
+      wk.register({
+        ["<Leader>;e"] = {
+          name = "Evaluate",
+        },
+      }, opts)
+
+
+      wk.register({
+        ["<Leader>;g"] = {
+          name = "Goto",
+        },
+      }, opts)
+    elseif fileType == 'sh' then
+
+    end
+end
 --return M;
