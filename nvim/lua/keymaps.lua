@@ -244,6 +244,8 @@ end
   -- Search --------------------------------------------------------------------
   keymap("n", "/", "/\\v", opts); -- Default escape all searches
   keymap("v", "/", "/\\v", opts); -- Default escape all searches
+  keymap("n", "<Leader>/", "<cmd>Telescope current_buffer_fuzzy_find<cr>", opts);  -- Use telescope search
+  keymap("n", "fb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", opts);  -- Use telescope search
   ------------------------------------------------------------------------------
   
   -- Esc -----------------------------------------------------------------------

@@ -1,7 +1,7 @@
 -- https://github.com/Olical/conjure
 
 vim.g["conjure#mapping#log_buf"] =                                        "lz"  -- Default
-vim.g["conjure#eval#result_register"] =                                    "*"  -- Modified from: "c"
+vim.g["conjure#eval#result_register"] =                                    "c"  -- Default
 vim.g["onjure#eval#inline_results"] =                                     true  -- Default
 vim.g["conjure#eval#inline#highlight"] =                             "Comment"  -- Default
 vim.g["conjure#eval#inline#prefix"] =                                     "=>"  -- Default
@@ -52,7 +52,7 @@ vim.g["conjure#log#break_length"] =                                         80  
 vim.g["onjure#log#trim#at"] =                                            10000  -- Default
 vim.g["conjure#log#trim#to"] =                                            7000  -- Default
 vim.g["conjure#log#strip_ansi_escape_sequences_line_limit"] =              100  -- Default
-vim.g["conjure#log#wrap"] =                                               true  -- Modified from: false
+vim.g["conjure#log#wrap"] =                                              false  -- Default
 vim.g["conjure#log#fold#enabled"] =                                      false  -- Default
 vim.g["conjure#log#fold#lines"] =                                           10  -- Default
 vim.g["conjure#log#fold#marker#start"] =                               "~~~%{"  -- Default
@@ -60,7 +60,7 @@ vim.g["conjure#log#fold#marker#end"] =                                 "}%~~~"  
 vim.g["conjure#log#jump_to_latest#enabled"] =                            false  -- Default
 vim.g["conjure#log#jump_to_latest#cursor_scroll_position"] =             "top"  -- Default
 vim.g["conjure#extract#context_header_lines"] =                             24  -- Default
-vim.g["conjure#extract#form_pairs"] =     [["(" ")"] ["{" "}"] ["[" "]" true]]  -- Default
+--vim.g["conjure#extract#form_pairs"] =     [["(" ")"] ["{" "}"] ["[" "]" true]]  -- Default
 vim.g["conjure#extract#tree_sitter#enabled"] =                           false  -- Default
 vim.g["conjure#preview#sample_limit"] =                                    0.3  -- Default
 vim.g["conjure#relative_file_root"] =                                      nil  -- Default
